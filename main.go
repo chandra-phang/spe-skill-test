@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"golang.org/x/exp/slices"
 )
 
 type ISpeSkill interface {
@@ -89,7 +91,14 @@ func (svc SpeSkillTest) FindNeedle(haystack []string, needle string) int {
 }
 
 func (svc SpeSkillTest) BlueOceanReverse(firstList []int, secondList []int) []int {
-	return []int{}
+	result := firstList
+	for _, number := range secondList {
+		if slices.Contains(result, number) {
+			result = removeFromArray(result, number)
+		}
+	}
+	fmt.Println(result)
+	return result
 }
 
 func powerOfNumber(number int, times int) int {
@@ -101,6 +110,18 @@ func powerOfNumber(number int, times int) int {
 	return result
 }
 
+func removeFromArray(items []int, item int) []int {
+	newitems := []int{}
+
+	for _, i := range items {
+		if i != item {
+			newitems = append(newitems, i)
+		}
+	}
+
+	return newitems
+}
+
 func main() {
 	InitSpeSkillTest()
 	speSkillTest := GetSpeSkillTest()
@@ -110,4 +131,6 @@ func main() {
 	speSkillTest.FindOutlier([]int{160, 3, 1719, 19, 11, 13, -21})
 	speSkillTest.FindOutlier([]int{11, 13, 15, 19, 9, 13, -21})
 	speSkillTest.FindNeedle([]string{"red", "blue", "yellow", "black", "grey"}, "blue")
+	speSkillTest.BlueOceanReverse([]int{1, 2, 3, 4, 6, 10}, []int{1})
+	speSkillTest.BlueOceanReverse([]int{1, 5, 5, 5, 5, 3}, []int{5})
 }
